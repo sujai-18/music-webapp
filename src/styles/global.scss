@@ -1,0 +1,20 @@
+.bg-body {
+    height: 100vh;
+}
+
+.ant-layout-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+.song-info {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    align-items: center;
+}
+
+.ant-layout {
+    padding: 0 !important;
+}

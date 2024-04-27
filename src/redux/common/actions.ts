@@ -1,5 +1,8 @@
 const actions = {
     GET_ALBUMS_LIST_SUCCESS: 'GET_ALBUMS_LIST_SUCCESS',
+    SET_TYPE: 'SET_TYPE',
+    ADD_TAB: 'ADD_TAB',
+    GET_SELECTED_ALBUM_SUCCESS: 'GET_SELECTED_ALBUM_SUCCESS'
 }
 
 export default actions;
