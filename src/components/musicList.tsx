@@ -3,6 +3,7 @@ import { useAppSelector } from "../hooks/reduxhooks";
 import { Table } from "antd";
 import type { TableProps } from "antd";
 import { MusicListContainer } from "../styles/styledCss";
+import { addToFavourites, addToQueue } from "../utils/helper";
 
 interface MusicListProps {
   activeTab: string;
@@ -13,6 +14,7 @@ interface DataType {
   artist: number;
   album: string;
   time: string[];
+  data: object
 }
 
 const formatDuration: any = (durationInMillis: number) => {
@@ -26,21 +28,27 @@ const MusicList: React.FC<MusicListProps> = ({ activeTab }) => {
   const selectedMusicList = useAppSelector(
     (state) => state.commonReducer.selectedMusicList
   );
+  const yourPlaylist = useAppSelector(
+    (state) => state.commonReducer.yourPlaylist
+  );
+  const queueList = useAppSelector(
+    (state) => state.commonReducer.queueList
+  );
   const activeTabList = selectedMusicList[activeTab];
   const screenHeight = document.getElementById("app")?.clientHeight || 700;
-  console.log({ activeTabList });
+  console.log({ activeTabList, yourPlaylist, queueList });
   const columns: TableProps<DataType>["columns"] = [
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
       width: "40%",
-      render: (text) => (
+      render: (text, data) => (
         <div style={{display: 'flex', justifyContent: 'space-between', flex: '1 0'}}>
           <a>{text}</a>
           <div style={{display: 'flex', gap: '10px'}}>
-            <div onClick={() => alert("F")}>F</div>
-            <div onClick={() => alert("Q")}>Q</div>
+            <div onClick={() => addToFavourites(data.data)}>F</div>
+            <div onClick={() => addToQueue(data.data)}>Q</div>
           </div>
         </div>
       ),
@@ -63,10 +71,12 @@ const MusicList: React.FC<MusicListProps> = ({ activeTab }) => {
       title: "Time",
       dataIndex: "time",
       key: "time",
+      width: '10%',
       render: (text) => <a>{text}</a>,
     },
   ];
-  const data: DataType[] = activeTabList?.map(
+  const list = activeTab === 'queue' ? queueList : yourPlaylist?.[activeTab] || activeTabList;
+  const data: DataType[] = list?.map(
     (
       data: {
         trackName: any;
@@ -81,6 +91,7 @@ const MusicList: React.FC<MusicListProps> = ({ activeTab }) => {
       artist: data.artistName,
       album: data.collectionName,
       time: formatDuration(data.trackTimeMillis),
+      data,
     })
   );
   return (

@@ -1,12 +1,28 @@
 import uniqid from 'uniqid';
 import actions from './actions';
-
+interface YourPlaylist {
+    [key: string]: any[]; // Adjust 'any[]' to the actual type of your playlist items
+  }
+  interface YourStateType {
+    addTab: any;
+    selectedMusicList: any;
+    playlistData: any;
+    queueList: any;
+    yourPlaylist: YourPlaylist;
+    // other state properties
+  }
 const initialState = {
     selectedMusicList: {},
     albumList: [],
     artistList: [],
     categoryList: [],
     addTab: [],
+    yourPlaylist: {},
+    queueList: [],
+    playlistModal: false,
+    playlistData: [
+        {title: 'Favourites', id: uniqid('playlist-')}
+    ]
 };
 interface Album {
     title: string;
@@ -27,7 +43,7 @@ interface Entry {
     [key: string]: any;
 }
 
-export default function commonReducer(state = initialState, action: { type: any; payload: any; }): any {
+export default function commonReducer(state: YourStateType = initialState, action: { type: any; payload: any; }): any {
     switch (action.type) {
         case actions.GET_ALBUMS_LIST_SUCCESS:
             const entries = action.payload;
@@ -88,6 +104,33 @@ export default function commonReducer(state = initialState, action: { type: any;
                     ...state.selectedMusicList,
                     [action.payload.key]: action.payload.list,
                 },
+            };
+            case actions.ADD_TO_FAVOURITES:
+                return {
+                  ...state,
+                  yourPlaylist: {
+                    ...state.yourPlaylist,
+                    [state.playlistData[0].id]: [
+                      ...(state.yourPlaylist?.[state?.playlistData?.[0]?.id] || []), // Use spread operator to merge arrays
+                      action.payload.favouriteList,
+                    ],
+                  },
+                };
+              
+            case actions.ADD_TO_QUEUE:
+            return {
+                ...state,
+                queueList: [...state.queueList, action.payload],
+            };
+            case actions.PLAYLIST_MODAL:
+            return {
+                ...state,
+                playlistModal: action.payload,
+            };
+            case actions.CREATE_PLAYLIST:
+            return {
+                ...state,
+                playlistData: [...state.playlistData, action.payload],
             };
         default:
             return state;

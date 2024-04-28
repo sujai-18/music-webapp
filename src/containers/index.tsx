@@ -24,6 +24,14 @@ const sideBarItems = [
   {
     label: "Categories",
   },
+  {
+    label: "Your Playlist",
+    key: 'playlist'
+  },
+  {
+    label: "Queue",
+    key: 'queue',
+  },
 ];
 const items1: MenuProps["items"] = ["1", "2", "3"].map((key) => ({
   key,
@@ -34,6 +42,8 @@ const items2: MenuProps["items"] = [
   UserOutlined,
   LaptopOutlined,
   NotificationOutlined,
+  NotificationOutlined,
+  NotificationOutlined,
 ].map((icon, index) => {
   const key = String(index + 1);
 
@@ -41,7 +51,7 @@ const items2: MenuProps["items"] = [
     key: `sub${key}`,
     icon: React.createElement(icon),
     label: sideBarItems[index]?.label || "",
-    onClick: () => setType(sideBarItems[index]?.label),
+    onClick: () => setType({title: sideBarItems[index]?.label, itemKey: sideBarItems[index]?.key}),
   };
 });
 
