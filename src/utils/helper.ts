@@ -37,16 +37,18 @@ export function calculateGridSettings({
 }
 
 export function setType(data: any) {
-  if(data.itemKey === 'playlist') {
-    store.dispatch({
-      type: actions.PLAYLIST_MODAL,
-      payload: true,
-    })
-  } else {
-    store.dispatch({
-      type: actions.ADD_TAB,
-      payload: { title: data.title, key: data.itemKey },
-    })
+  if (!checkForExistence(data.itemKey)) {
+    if (data.itemKey === 'playlist') {
+      store.dispatch({
+        type: actions.PLAYLIST_MODAL,
+        payload: true,
+      })
+    } else {
+      store.dispatch({
+        type: actions.ADD_TAB,
+        payload: { title: data.title, key: data.itemKey },
+      })
+    }
   }
 }
 
@@ -69,6 +71,12 @@ export function addToQueue(data: object) {
 export function createPlaylist(data: string) {
   store.dispatch({
     type: actions.CREATE_PLAYLIST,
-    payload: {title: data, id: uniqid('playlist')},
+    payload: { title: data, id: uniqid('playlist') },
   })
+}
+
+export function checkForExistence(itemKey: any) {
+  const { addTab } = store.getState().commonReducer;
+  const doesExists = addTab.some((tab: { key: any; }) => tab.key === itemKey);
+  return doesExists;
 }

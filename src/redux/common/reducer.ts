@@ -1,16 +1,20 @@
 import uniqid from 'uniqid';
 import actions from './actions';
 interface YourPlaylist {
-    [key: string]: any[]; // Adjust 'any[]' to the actual type of your playlist items
+    [key: string]: any[];
+}
+interface searchOption {
+    value: string; 
   }
-  interface YourStateType {
+interface YourStateType {
     addTab: any;
     selectedMusicList: any;
     playlistData: any;
     queueList: any;
     yourPlaylist: YourPlaylist;
-    // other state properties
-  }
+    searchList: any,
+    searchOptions: searchOption[],
+}
 const initialState = {
     selectedMusicList: {},
     albumList: [],
@@ -21,8 +25,10 @@ const initialState = {
     queueList: [],
     playlistModal: false,
     playlistData: [
-        {title: 'Favourites', id: uniqid('playlist-')}
-    ]
+        { title: 'Favourites', id: uniqid('playlist-') }
+    ],
+    searchList: [],
+    searchOptions: [],
 };
 interface Album {
     title: string;
@@ -75,18 +81,21 @@ export default function commonReducer(state: YourStateType = initialState, actio
                     categoryList.push({ name: album.category });
                 }
             })
+            console.log({ albumList });
+
             return {
                 ...state,
                 albumList,
                 artistList,
                 categoryList,
+                searchOptions: albumList?.map((data: { title: any; }) => ({ value: data?.title }))
             };
         case actions.SET_TYPE:
             return {
                 ...state,
                 musicType: action.payload,
             };
-            case actions.ADD_TAB:
+        case actions.ADD_TAB:
             return {
                 ...state,
                 addTab: [
@@ -94,10 +103,10 @@ export default function commonReducer(state: YourStateType = initialState, actio
                     {
                         key: action.payload.key,
                         label: action.payload.title,
-                      },
+                    },
                 ],
             };
-            case actions.GET_SELECTED_ALBUM_SUCCESS:
+        case actions.GET_SELECTED_ALBUM_SUCCESS:
             return {
                 ...state,
                 selectedMusicList: {
@@ -105,32 +114,37 @@ export default function commonReducer(state: YourStateType = initialState, actio
                     [action.payload.key]: action.payload.list,
                 },
             };
-            case actions.ADD_TO_FAVOURITES:
-                return {
-                  ...state,
-                  yourPlaylist: {
+        case actions.ADD_TO_FAVOURITES:
+            return {
+                ...state,
+                yourPlaylist: {
                     ...state.yourPlaylist,
                     [state.playlistData[0].id]: [
-                      ...(state.yourPlaylist?.[state?.playlistData?.[0]?.id] || []), // Use spread operator to merge arrays
-                      action.payload.favouriteList,
+                        ...(state.yourPlaylist?.[state?.playlistData?.[0]?.id] || []), // Use spread operator to merge arrays
+                        action.payload.favouriteList,
                     ],
-                  },
-                };
-              
-            case actions.ADD_TO_QUEUE:
+                },
+            };
+
+        case actions.ADD_TO_QUEUE:
             return {
                 ...state,
                 queueList: [...state.queueList, action.payload],
             };
-            case actions.PLAYLIST_MODAL:
+        case actions.PLAYLIST_MODAL:
             return {
                 ...state,
                 playlistModal: action.payload,
             };
-            case actions.CREATE_PLAYLIST:
+        case actions.CREATE_PLAYLIST:
             return {
                 ...state,
                 playlistData: [...state.playlistData, action.payload],
+            };
+        case actions.SEARCH_RESULTS:
+            return {
+                ...state,
+                searchList: action.payload,
             };
         default:
             return state;

@@ -7,6 +7,7 @@ const actions = {
     ADD_TO_QUEUE: 'ADD_TO_QUEUE',
     PLAYLIST_MODAL: 'PLAYLIST_MODAL',
     CREATE_PLAYLIST: 'CREATE_PLAYLIST',
+    SEARCH_RESULTS: 'SEARCH_RESULTS',
 }
 
 export default actions;

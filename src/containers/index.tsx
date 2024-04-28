@@ -32,6 +32,10 @@ const sideBarItems = [
     label: "Queue",
     key: 'queue',
   },
+  {
+    label: "Search",
+    key: 'search',
+  },
 ];
 const items1: MenuProps["items"] = ["1", "2", "3"].map((key) => ({
   key,
@@ -41,6 +45,7 @@ const items1: MenuProps["items"] = ["1", "2", "3"].map((key) => ({
 const items2: MenuProps["items"] = [
   UserOutlined,
   LaptopOutlined,
+  NotificationOutlined,
   NotificationOutlined,
   NotificationOutlined,
   NotificationOutlined,

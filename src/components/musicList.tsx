@@ -1,9 +1,11 @@
-import React, { ReactNode } from "react";
+import React, { useState } from "react";
 import { useAppSelector } from "../hooks/reduxhooks";
-import { Table } from "antd";
-import type { TableProps } from "antd";
+import { Space, Table } from "antd";
+import type { Input, TableProps } from "antd";
 import { MusicListContainer } from "../styles/styledCss";
 import { addToFavourites, addToQueue } from "../utils/helper";
+import Search from "./shared/search";
+import { HeartTwoTone } from '@ant-design/icons';
 
 interface MusicListProps {
   activeTab: string;
@@ -14,7 +16,7 @@ interface DataType {
   artist: number;
   album: string;
   time: string[];
-  data: object
+  data: object;
 }
 
 const formatDuration: any = (durationInMillis: number) => {
@@ -31,8 +33,8 @@ const MusicList: React.FC<MusicListProps> = ({ activeTab }) => {
   const yourPlaylist = useAppSelector(
     (state) => state.commonReducer.yourPlaylist
   );
-  const queueList = useAppSelector(
-    (state) => state.commonReducer.queueList
+  const { queueList, searchList } = useAppSelector(
+    (state) => state.commonReducer
   );
   const activeTabList = selectedMusicList[activeTab];
   const screenHeight = document.getElementById("app")?.clientHeight || 700;
@@ -44,12 +46,18 @@ const MusicList: React.FC<MusicListProps> = ({ activeTab }) => {
       key: "name",
       width: "40%",
       render: (text, data) => (
-        <div style={{display: 'flex', justifyContent: 'space-between', flex: '1 0'}}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            flex: "1 0",
+          }}
+        >
           <a>{text}</a>
-          <div style={{display: 'flex', gap: '10px'}}>
-            <div onClick={() => addToFavourites(data.data)}>F</div>
+          <Space style={{ display: "flex", gap: "10px" }}>
+            <div onClick={() => addToFavourites(data.data)}><HeartTwoTone twoToneColor="#eb2f96" /></div>
             <div onClick={() => addToQueue(data.data)}>Q</div>
-          </div>
+          </Space>
         </div>
       ),
     },
@@ -71,11 +79,16 @@ const MusicList: React.FC<MusicListProps> = ({ activeTab }) => {
       title: "Time",
       dataIndex: "time",
       key: "time",
-      width: '10%',
+      width: "10%",
       render: (text) => <a>{text}</a>,
     },
   ];
-  const list = activeTab === 'queue' ? queueList : yourPlaylist?.[activeTab] || activeTabList;
+  const list =
+    activeTab === "search"
+      ? searchList
+      : activeTab === "queue"
+        ? queueList
+        : yourPlaylist?.[activeTab] || activeTabList;
   const data: DataType[] = list?.map(
     (
       data: {
@@ -94,17 +107,26 @@ const MusicList: React.FC<MusicListProps> = ({ activeTab }) => {
       data,
     })
   );
+  const [value, setValue] = useState<string>("");
+
   return (
-    <MusicListContainer>
-      <Table
-        columns={columns}
-        dataSource={data || []}
-        pagination={false}
-        virtual
-        scroll={{ y: screenHeight - 200 }}
-        bordered={false}
-      />
-    </MusicListContainer>
+    <>
+      {activeTab === "search" ? (
+        <>
+        <Search />
+        </>
+      ) : null}
+      <MusicListContainer>
+        <Table
+          columns={columns}
+          dataSource={data || []}
+          pagination={false}
+          virtual
+          scroll={{ y: screenHeight - 200 }}
+          bordered={false}
+        />
+      </MusicListContainer>
+    </>
   );
 };
 
