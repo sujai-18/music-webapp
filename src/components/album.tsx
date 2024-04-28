@@ -1,14 +1,7 @@
 import React from "react";
 import { useAppSelector } from "../hooks/reduxhooks";
 import MusicCard from "./shared/musicCard";
-import styled from 'styled-components';
-
-const MusicCardContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-  justify-content: center;
-`;
+import { MusicCardContainer } from "../styles/styledCss";
 
 interface Album {
   title: string;

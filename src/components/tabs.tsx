@@ -12,6 +12,7 @@ import { Tabs } from "antd";
 import Album from "./album";
 import { useAppSelector } from "../hooks/reduxhooks";
 import MusicList from "./musicList";
+import { TabsContainer } from "../styles/styledCss";
 
 interface DraggableTabPaneProps extends React.HTMLAttributes<HTMLDivElement> {
   "data-node-key": string;
@@ -76,27 +77,29 @@ const MusicTabs: React.FC = () => {
   };
 
   return (
-    <Tabs
-      items={items}
-      activeKey={activeKey}
-      onChange={(key) => setActiveKey(key)}
-      renderTabBar={(tabBarProps, DefaultTabBar) => (
-        <DndContext sensors={[sensor]} onDragEnd={onDragEnd}>
-          <SortableContext
-            items={items.map((i) => i.key)}
-            strategy={horizontalListSortingStrategy}
-          >
-            <DefaultTabBar {...tabBarProps}>
-              {(node) => (
-                <DraggableTabNode {...node.props} key={node.key}>
-                  {node}
-                </DraggableTabNode>
-              )}
-            </DefaultTabBar>
-          </SortableContext>
-        </DndContext>
-      )}
-    ></Tabs>
+    <TabsContainer>
+      <Tabs
+        items={items}
+        activeKey={activeKey}
+        onChange={(key) => setActiveKey(key)}
+        renderTabBar={(tabBarProps, DefaultTabBar) => (
+          <DndContext sensors={[sensor]} onDragEnd={onDragEnd}>
+            <SortableContext
+              items={items.map((i) => i.key)}
+              strategy={horizontalListSortingStrategy}
+            >
+              <DefaultTabBar {...tabBarProps}>
+                {(node) => (
+                  <DraggableTabNode {...node.props} key={node.key}>
+                    {node}
+                  </DraggableTabNode>
+                )}
+              </DefaultTabBar>
+            </SortableContext>
+          </DndContext>
+        )}
+      />
+    </TabsContainer>
   );
 };
 

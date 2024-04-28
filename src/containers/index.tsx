@@ -11,6 +11,7 @@ import Album from "../components/album";
 import "../styles/global.scss";
 import { setType } from "../utils/helper";
 import MusicTabs from "../components/tabs";
+import { ContentContainer, HeaderContainer, SiderContainer } from "../styles/styledCss";
 
 const { Header, Content, Sider } = Layout;
 const sideBarItems = [
@@ -53,38 +54,43 @@ const Index: React.FC = () => {
   }, []);
   return (
     <Layout>
-      <Sider width={200} style={{ background: colorBgContainer }}>
-        <Menu
-          mode="inline"
-          defaultSelectedKeys={["1"]}
-          defaultOpenKeys={["sub1"]}
-          style={{ height: "100%", borderRight: 0 }}
-          items={items2}
-        />
-      </Sider>
-      <Layout style={{ padding: "0 24px 24px" }}>
-        <Header style={{ display: "flex", alignItems: "center" }}>
-          <div className="demo-logo" />
+      <SiderContainer>
+        <Sider width={200} style={{ background: colorBgContainer }}>
           <Menu
-            theme="dark"
-            mode="horizontal"
-            defaultSelectedKeys={["2"]}
-            items={items1}
-            style={{ flex: 1, minWidth: 0 }}
+            mode="inline"
+            defaultSelectedKeys={["1"]}
+            defaultOpenKeys={["sub1"]}
+            style={{ height: "100%", borderRight: 0 }}
+            items={items2}
           />
-        </Header>
-        <Content
-          style={{
-            padding: 24,
-            margin: 0,
-            minHeight: 280,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        >
-          <MusicTabs />
-          {/* <Album /> */}
-        </Content>
+        </Sider>
+      </SiderContainer>
+      <Layout style={{ padding: "0 24px 24px" }}>
+        <HeaderContainer>
+          <Header style={{ display: "flex", alignItems: "center" }}>
+            <div className="demo-logo" />
+            <Menu
+              theme="dark"
+              mode="horizontal"
+              defaultSelectedKeys={["2"]}
+              items={items1}
+              style={{ flex: 1, minWidth: 0 }}
+            />
+          </Header>
+        </HeaderContainer>
+        <ContentContainer>
+          <Content
+            style={{
+              padding: 24,
+              margin: 0,
+              minHeight: 280,
+              background: colorBgContainer,
+              borderRadius: borderRadiusLG,
+            }}
+          >
+            <MusicTabs />
+          </Content>
+        </ContentContainer>
       </Layout>
     </Layout>
   );
