@@ -102,3 +102,36 @@ export const TabsContainer = styled.div`
     color: #e9ecf1;
 }
 `;
+
+export const MusicTrackerContainer = styled.div`
+  height: 50px;
+  background: #2c2c2c;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding: 0 24px;
+  svg {
+    font-size: 22px;
+    cursor: pointer;
+  }
+  input {
+    margin: 0 5px 0 24px;
+    max-width: 200px;
+    height: 2px;
+  }
+  .relative {
+    position: relative;
+    display: flex;
+  }
+  .start-time, .end-time {
+    position: absolute;
+    top: 6px;
+    color: #7a7b7b;
+    }
+    .start-time {
+      left: 25px;
+    }
+    .end-time {
+      right: 5px;
+    }
+`;

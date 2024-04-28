@@ -80,3 +80,10 @@ export function checkForExistence(itemKey: any) {
   const doesExists = addTab.some((tab: { key: any; }) => tab.key === itemKey);
   return doesExists;
 }
+
+export function playSong(data: any) {
+  store.dispatch({
+    type: actions.PLAY_SONG,
+    payload: { audioUrl: data?.previewUrl, id: data?.trackId },
+  })
+}

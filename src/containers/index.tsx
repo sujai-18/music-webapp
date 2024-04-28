@@ -11,7 +11,13 @@ import Album from "../components/album";
 import "../styles/global.scss";
 import { setType } from "../utils/helper";
 import MusicTabs from "../components/tabs";
-import { ContentContainer, HeaderContainer, SiderContainer } from "../styles/styledCss";
+import {
+  ContentContainer,
+  HeaderContainer,
+  MusicTrackerContainer,
+  SiderContainer,
+} from "../styles/styledCss";
+import MusicPlayerApp from "../components/player/mediaPlayer";
 
 const { Header, Content, Sider } = Layout;
 const sideBarItems = [
@@ -26,15 +32,15 @@ const sideBarItems = [
   },
   {
     label: "Your Playlist",
-    key: 'playlist'
+    key: "playlist",
   },
   {
     label: "Queue",
-    key: 'queue',
+    key: "queue",
   },
   {
     label: "Search",
-    key: 'search',
+    key: "search",
   },
 ];
 const items1: MenuProps["items"] = ["1", "2", "3"].map((key) => ({
@@ -56,7 +62,11 @@ const items2: MenuProps["items"] = [
     key: `sub${key}`,
     icon: React.createElement(icon),
     label: sideBarItems[index]?.label || "",
-    onClick: () => setType({title: sideBarItems[index]?.label, itemKey: sideBarItems[index]?.key}),
+    onClick: () =>
+      setType({
+        title: sideBarItems[index]?.label,
+        itemKey: sideBarItems[index]?.key,
+      }),
   };
 });
 
@@ -81,18 +91,9 @@ const Index: React.FC = () => {
         </Sider>
       </SiderContainer>
       <Layout style={{ padding: "0 24px 24px" }}>
-        <HeaderContainer>
-          <Header style={{ display: "flex", alignItems: "center" }}>
-            <div className="demo-logo" />
-            <Menu
-              theme="dark"
-              mode="horizontal"
-              defaultSelectedKeys={["2"]}
-              items={items1}
-              style={{ flex: 1, minWidth: 0 }}
-            />
-          </Header>
-        </HeaderContainer>
+        <MusicTrackerContainer>
+          <MusicPlayerApp />
+        </MusicTrackerContainer>
         <ContentContainer>
           <Content
             style={{

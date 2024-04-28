@@ -4,8 +4,11 @@ interface YourPlaylist {
     [key: string]: any[];
 }
 interface searchOption {
-    value: string; 
-  }
+    value: string;
+}
+interface songsList {
+    audioUrl: string;
+}
 interface YourStateType {
     addTab: any;
     selectedMusicList: any;
@@ -14,6 +17,8 @@ interface YourStateType {
     yourPlaylist: YourPlaylist;
     searchList: any,
     searchOptions: searchOption[],
+    songClicked: string,
+    songsList: songsList[],
 }
 const initialState = {
     selectedMusicList: {},
@@ -29,6 +34,13 @@ const initialState = {
     ],
     searchList: [],
     searchOptions: [],
+    songClicked: '',
+    songsList: [
+        {
+            audioUrl:
+              "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/10/01/d1/1001d1ed-9ba0-0728-d1f1-88a2af450e14/mzaf_10159851443471051651.plus.aac.p.m4a",
+          }
+    ],
 };
 interface Album {
     title: string;
@@ -120,7 +132,7 @@ export default function commonReducer(state: YourStateType = initialState, actio
                 yourPlaylist: {
                     ...state.yourPlaylist,
                     [state.playlistData[0].id]: [
-                        ...(state.yourPlaylist?.[state?.playlistData?.[0]?.id] || []), // Use spread operator to merge arrays
+                        ...(state.yourPlaylist?.[state?.playlistData?.[0]?.id] || []),
                         action.payload.favouriteList,
                     ],
                 },
@@ -145,6 +157,18 @@ export default function commonReducer(state: YourStateType = initialState, actio
             return {
                 ...state,
                 searchList: action.payload,
+            };
+        case actions.PLAY_SONG:
+            return {
+                ...state,
+                songClicked: action.payload.id,
+                songsList: [action.payload.audioUrl, ...state.songsList],
+            };
+        case actions.UPDATE_SONG_LIST:
+            return {
+                ...state,
+                songClicked: action.payload.id,
+                songsList: [...state.songsList, ...action.payload.map((data: { previewUrl: string; }) => ({ audioUrl: data.previewUrl }))],
             };
         default:
             return state;

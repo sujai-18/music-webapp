@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppSelector } from "../hooks/reduxhooks";
 import { Space, Table } from "antd";
 import type { Input, TableProps } from "antd";
 import { MusicListContainer } from "../styles/styledCss";
-import { addToFavourites, addToQueue } from "../utils/helper";
+import { addToFavourites, addToQueue, playSong } from "../utils/helper";
 import Search from "./shared/search";
 import { HeartTwoTone } from '@ant-design/icons';
+import store from "../redux/store";
+import actions from "../redux/common/actions";
 
 interface MusicListProps {
   activeTab: string;
@@ -39,6 +41,14 @@ const MusicList: React.FC<MusicListProps> = ({ activeTab }) => {
   const activeTabList = selectedMusicList[activeTab];
   const screenHeight = document.getElementById("app")?.clientHeight || 700;
   console.log({ activeTabList, yourPlaylist, queueList });
+  useEffect(() => {
+    if (activeTabList?.length) {
+      store.dispatch({
+        type: actions.UPDATE_SONG_LIST,
+        payload: activeTabList,
+      })
+    }
+  }, [activeTabList?.length])
   const columns: TableProps<DataType>["columns"] = [
     {
       title: "Name",
@@ -53,7 +63,7 @@ const MusicList: React.FC<MusicListProps> = ({ activeTab }) => {
             flex: "1 0",
           }}
         >
-          <a>{text}</a>
+          <a onClick={() => playSong(data.data)}>{text}</a>
           <Space style={{ display: "flex", gap: "10px" }}>
             <div onClick={() => addToFavourites(data.data)}><HeartTwoTone twoToneColor="#eb2f96" /></div>
             <div onClick={() => addToQueue(data.data)}>Q</div>
