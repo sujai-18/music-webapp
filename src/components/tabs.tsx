@@ -8,12 +8,19 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Tabs } from "antd";
+import { Avatar, Spin, Tabs } from "antd";
 import Album from "./album";
 import { useAppSelector } from "../hooks/reduxhooks";
 import MusicList from "./musicList";
 import { TabsContainer } from "../styles/styledCss";
-
+import actions from "../redux/common/actions";
+import store from "../redux/store";
+import {
+  HomeOutlined,
+  SearchOutlined,
+  UnorderedListOutlined,
+  HeartOutlined,
+} from "@ant-design/icons";
 interface DraggableTabPaneProps extends React.HTMLAttributes<HTMLDivElement> {
   "data-node-key": string;
 }
@@ -40,15 +47,35 @@ const DraggableTabNode = ({ className, ...props }: DraggableTabPaneProps) => {
 };
 
 const MusicTabs: React.FC = () => {
-  const addTab = useAppSelector((state) => state.commonReducer.addTab);
-  const [activeKey, setActiveKey] = useState<string>("1");
+  const {addTab, activeTabKey, loader} = useAppSelector((state) => state.commonReducer);
   const [items, setItems] = useState([
     {
       key: "1",
       label: "Home",
       children: <Album />,
+      icon: <HomeOutlined />,
     },
   ]);
+  const getChildren = () => {
+    const key = addTab[addTab.length - 1].key;
+    if(key === 'categories') {
+      return <Album activeTab={'categories'} />
+    } else if (key === 'artist') {
+      return <Album activeTab={'categories'} />
+    }
+    return <MusicList activeTab={addTab[addTab.length - 1].key} />
+  }
+  const getAvatar = () => {
+    const key = addTab[addTab.length - 1].key;
+    if (key === 'favourites') {
+      return <HeartOutlined />;
+    } else if (key === 'queue') {
+      return <UnorderedListOutlined />;
+    } else if (key === 'search') {
+      return <SearchOutlined />;
+    }
+    return <Avatar src={addTab[addTab.length - 1]?.avatar} />;
+  }
   useEffect(() => {
     if (addTab.length) {
       setActiveKey(addTab[addTab.length - 1].key);
@@ -56,7 +83,8 @@ const MusicTabs: React.FC = () => {
         ...items,
         {
           ...addTab[addTab.length - 1],
-          children: <MusicList activeTab={addTab[addTab.length - 1].key} />,
+          children: getChildren(),
+          icon: getAvatar(),
         },
       ]);
     }
@@ -76,11 +104,20 @@ const MusicTabs: React.FC = () => {
     }
   };
 
+  const setActiveKey = (key: any) => {
+    store.dispatch({
+      type: actions.ACTIVE_TAB_KEY,
+      payload: key,
+    })
+  }
+
+  if (loader) return <Spin fullscreen />;
+
   return (
     <TabsContainer>
       <Tabs
         items={items}
-        activeKey={activeKey}
+        activeKey={activeTabKey}
         onChange={(key) => setActiveKey(key)}
         renderTabBar={(tabBarProps, DefaultTabBar) => (
           <DndContext sensors={[sensor]} onDragEnd={onDragEnd}>

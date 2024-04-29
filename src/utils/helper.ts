@@ -37,7 +37,7 @@ export function calculateGridSettings({
 }
 
 export function setType(data: any) {
-  if (!checkForExistence(data.itemKey)) {
+  if (!checkForExistence(data.itemKey) && data.itemKey !== '1') {
     if (data.itemKey === 'playlist') {
       store.dispatch({
         type: actions.PLAYLIST_MODAL,
@@ -50,6 +50,10 @@ export function setType(data: any) {
       })
     }
   }
+  store.dispatch({
+    type: actions.ACTIVE_TAB_KEY,
+    payload: data.itemKey,
+  })
 }
 
 export function addToFavourites(data: object) {

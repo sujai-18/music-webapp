@@ -5,27 +5,41 @@ import { checkForExistence } from '../utils/helper';
 
 const iTunesAPI = 'https://itunes.apple.com/us/rss/topalbums/limit=100/json';
 
+function loader(payload: boolean) {
+    store.dispatch({
+        type: actions.LOADER,
+        payload,
+    })
+}
 export const fetchAlbums = async () => {
     try {
+        loader(true);
         const response = await axios.get(iTunesAPI);
         store.dispatch({
             type: actions.GET_ALBUMS_LIST_SUCCESS,
             payload: response.data.feed,
         })
     } catch (error) {
+        loader(false);
         console.error('Error fetching albums:', error);
         throw new Error('Failed to fetch albums');
     }
 };
 
-export const fetchByTerm = async (params: { title: string; itemKey: string; }) => {
+export const fetchByTerm = async (params: { title: string; itemKey: string; avatar: string; }) => {
     if (!checkForExistence(params.itemKey)) {
         store.dispatch({
             type: actions.ADD_TAB,
-            payload: { title: params.title, key: params.itemKey },
+            payload: { title: params.title, key: params.itemKey, avatar: params.avatar },
+        })
+    } else {
+        store.dispatch({
+            type: actions.ACTIVE_TAB_KEY,
+            payload: params.itemKey,
         })
     }
     try {
+        loader(true);
         const response = await axios.get(`https://itunes.apple.com/search?term=${params.title}`);
         store.dispatch({
             type: actions.GET_SELECTED_ALBUM_SUCCESS,
@@ -35,20 +49,23 @@ export const fetchByTerm = async (params: { title: string; itemKey: string; }) =
             },
         })
     } catch (error) {
+        loader(false);
         console.error('Error fetching albums:', error);
-        throw new Error('Failed to fetch albums');
+        // throw new Error('Failed to fetch albums');
     }
 };
 
 export const searchMusicApi = async (params: { value: string; }) => {
     try {
+        loader(true);
         const response = await axios.get(`https://itunes.apple.com/search?term=${params.value}`);
         store.dispatch({
             type: actions.SEARCH_RESULTS,
             payload: response.data.results,
         })
     } catch (error) {
+        loader(false);
         console.error('Error fetching albums:', error);
-        throw new Error('Failed to fetch albums');
+        // throw new Error('Failed to fetch albums');
     }
 };

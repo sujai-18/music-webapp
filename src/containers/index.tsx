@@ -1,8 +1,11 @@
 import React, { useEffect } from "react";
 import {
-  LaptopOutlined,
+  HomeOutlined,
   NotificationOutlined,
   UserOutlined,
+  SearchOutlined,
+  UnorderedListOutlined,
+  HeartOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
@@ -18,21 +21,29 @@ import {
   SiderContainer,
 } from "../styles/styledCss";
 import MusicPlayerApp from "../components/player/mediaPlayer";
+import { ReactComponent as MusicIcon } from "../assets/svgs/music.svg";
 
-const { Header, Content, Sider } = Layout;
+const { Content, Sider } = Layout;
 const sideBarItems = [
   {
     label: "Albums",
+    key: "1",
   },
+  // {
+  //   label: "Artist",
+  //   key: 'artist',
+  // },
+  // {
+  //   label: "Categories",
+  //   key: "categories",
+  // },
+  // {
+  //   label: "Your Playlist",
+  //   key: "playlist",
+  // },
   {
-    label: "Artist",
-  },
-  {
-    label: "Categories",
-  },
-  {
-    label: "Your Playlist",
-    key: "playlist",
+    label: "Favourites",
+    key: "favourites",
   },
   {
     label: "Queue",
@@ -49,12 +60,13 @@ const items1: MenuProps["items"] = ["1", "2", "3"].map((key) => ({
 }));
 
 const items2: MenuProps["items"] = [
-  UserOutlined,
-  LaptopOutlined,
-  NotificationOutlined,
-  NotificationOutlined,
-  NotificationOutlined,
-  NotificationOutlined,
+  HomeOutlined,
+  // UserOutlined,
+  // NotificationOutlined,
+  // NotificationOutlined,
+  HeartOutlined,
+  UnorderedListOutlined,
+  SearchOutlined,
 ].map((icon, index) => {
   const key = String(index + 1);
 
@@ -81,6 +93,12 @@ const Index: React.FC = () => {
     <Layout>
       <SiderContainer>
         <Sider width={200} style={{ background: colorBgContainer }}>
+          <div className="title">
+            <div>
+              <MusicIcon />
+            </div>
+            <div>Music</div>
+          </div>
           <Menu
             mode="inline"
             defaultSelectedKeys={["1"]}

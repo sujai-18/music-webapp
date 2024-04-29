@@ -1,5 +1,6 @@
 .bg-body {
     height: 100vh;
+    overflow: hidden;
 }
 
 .ant-layout-content {
@@ -16,5 +17,9 @@
 }
 
 .ant-layout {
+    height: 100%;
     padding: 0 !important;
+    .ant-layout-content {
+        height: 100%;
+    }
 }

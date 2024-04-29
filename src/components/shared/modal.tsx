@@ -22,7 +22,6 @@ const CommonModal: React.FC = () => {
   };
 
   const onClick = (key: string, data: string) => {
-    console.log({ key, data });
     // Dispatching an action to close the playlist modal
     store.dispatch({
       type: actions.PLAYLIST_MODAL,
