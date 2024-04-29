@@ -19,6 +19,7 @@ import {
 } from "../styles/styledCss";
 import MusicPlayerApp from "../components/player/mediaPlayer";
 import { ReactComponent as MusicIcon } from "../assets/svgs/music.svg";
+import MessageComponent from "../components/shared/messageComponent";
 
 const { Content, Sider } = Layout;
 // Array of sidebar items
@@ -112,6 +113,7 @@ const Index: React.FC = () => {
           </Content>
         </ContentContainer>
       </Layout>
+      <MessageComponent />
     </Layout>
   );
 };

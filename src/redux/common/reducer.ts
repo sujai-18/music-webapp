@@ -36,12 +36,13 @@ interface YourStateType {
     activeTabKey: any,
     loader: boolean,
     clearTabs: boolean,
+    messageContent: string;
 }
 // Define the default URL for songs
 const defaultUrl =
     "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/10/01/d1/1001d1ed-9ba0-0728-d1f1-88a2af450e14/mzaf_10159851443471051651.plus.aac.p.m4a";
 // Define the initial state of the reducer
-    const initialState = {
+const initialState = {
     selectedMusicList: {},
     albumList: [],
     artistList: [],
@@ -69,6 +70,7 @@ const defaultUrl =
     activeTabKey: "1",
     loader: false,
     clearTabs: false,
+    messageContent: '',
 };
 interface Album {
     title: string;
@@ -170,6 +172,7 @@ export default function commonReducer(state: YourStateType = initialState, actio
                     ],
                 },
                 favouriteList: updateFavList,
+                messageContent: updateFavList.length > state.favouriteList.length ? 'Music added to Favourite List !' : 'Music removed from Favourite List !',
             };
         case actions.ADD_TO_QUEUE:
             // Check if the track id already exists in the queueList
@@ -184,13 +187,15 @@ export default function commonReducer(state: YourStateType = initialState, actio
                         ...state.queueListUrl,
                         { audioUrl: action.payload.previewUrl, id: action.payload.trackId, status: false }
                     ],
+                    messageContent: 'Music added to Queue List !',
                 };
             } else {
                 // If the track is already in the queueList, remove it
                 return {
                     ...state,
                     queueList: state.queueList.filter((item: { trackId: any; }) => item.trackId !== action.payload.trackId),
-                    queueListUrl: state.queueListUrl.filter(item => item.id !== action.payload.trackId)
+                    queueListUrl: state.queueListUrl.filter(item => item.id !== action.payload.trackId),
+                    messageContent: 'Music removed from Queue List !',
                 };
             }
         case actions.UPDATE_QUEUE:
@@ -251,16 +256,22 @@ export default function commonReducer(state: YourStateType = initialState, actio
                 ...state,
                 activeTabKey: action.payload
             };
-            case actions.LOADER:
+        case actions.LOADER:
             return {
                 ...state,
                 loader: action.payload
             };
-            case actions.CLEAR_TABS:
+        case actions.CLEAR_TABS:
             return {
                 ...state,
                 clearTabs: action.payload,
                 addTab: [],
+                messageContent: action.payload ? 'Tabs cleared !' : '',
+            };
+        case actions.MESSAGE_CONTENT:
+            return {
+                ...state,
+                messageContent: action.payload,
             };
         default:
             return state;

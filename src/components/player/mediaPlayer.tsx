@@ -147,9 +147,21 @@ const MusicPlayer: React.FC<{ playlist: Song[] }> = ({ playlist }) => {
     }
   }, [currentIndex]);
   const toggleRepeatMode = () => {
+    dispatch({
+      type: actions.MESSAGE_CONTENT,
+      payload: repeatMode
+        ? "Repeat mode set to Off !"
+        : "Repeat mode set to On !",
+    });
     setRepeatMode((prevMode) => !prevMode);
   };
   const toggleShuffleMode = () => {
+    dispatch({
+      type: actions.MESSAGE_CONTENT,
+      payload: shuffleMode
+        ? "Shuffle mode set to Off !"
+        : "Shuffle mode set to On !",
+    });
     setShuffleMode((prevMode) => !prevMode);
     if (!isPlaying) {
       setIsPlaying(true);

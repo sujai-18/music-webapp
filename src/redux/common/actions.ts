@@ -14,6 +14,7 @@ const actions = {
     ACTIVE_TAB_KEY: 'ACTIVE_TAB_KEY',
     LOADER: 'LOADER',
     CLEAR_TABS: 'CLEAR_TABS',
+    MESSAGE_CONTENT: 'MESSAGE_CONTENT',
 }
 
 export default actions;
