@@ -2,7 +2,6 @@ import React from "react";
 import { useAppSelector } from "../hooks/reduxhooks";
 import MusicCard from "./shared/musicCard";
 import { MusicCardContainer } from "../styles/styledCss";
-import CommonModal from "./shared/modal";
 import { Spin } from "antd";
 
 const Album: React.FC<any> = ({ activeTab }) => {
@@ -35,7 +34,6 @@ const Album: React.FC<any> = ({ activeTab }) => {
           />
         ))}
       </MusicCardContainer>
-      <CommonModal />
     </>
   );
 };

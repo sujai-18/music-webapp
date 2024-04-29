@@ -28,10 +28,7 @@ const MusicList: React.FC<MusicListProps> = ({ activeTab }) => {
   const selectedMusicList = useAppSelector(
     (state) => state.commonReducer.selectedMusicList
   );
-  const yourPlaylist = useAppSelector(
-    (state) => state.commonReducer.yourPlaylist
-  );
-  const { queueList, searchList, songsList, favouriteList } = useAppSelector(
+  const { queueList, searchList, favouriteList } = useAppSelector(
     (state) => state.commonReducer
   );
   const activeTabList = selectedMusicList[activeTab];
@@ -143,7 +140,7 @@ const MusicList: React.FC<MusicListProps> = ({ activeTab }) => {
         ? searchList
         : activeTab === "queue"
           ? queueList
-          : yourPlaylist?.[activeTab] || activeTabList;
+          : activeTabList;
   const data: DataType[] = list?.map(
     (
       data: {

@@ -10,7 +10,7 @@ const { Meta } = Card;
 const CommonModal: React.FC = () => {
   const dispatch = useDispatch();
   const [value, setValue] = useState<string>("");
-  const { playlistModal, yourPlaylist, playlistData } = useAppSelector(
+  const { playlistModal, playlistData } = useAppSelector(
     (state) => state.commonReducer
   );
 

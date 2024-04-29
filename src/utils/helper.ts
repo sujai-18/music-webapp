@@ -65,18 +65,11 @@ export function setType(data: any) {
     }, 100)
   } else {
     if (!checkForExistence(data.itemKey) && data.itemKey !== '1') {
-      if (data.itemKey === 'playlist') {
-        store.dispatch({
-          type: actions.PLAYLIST_MODAL,
-          payload: true,
-        })
-      } else {
-        // Add tab action
-        store.dispatch({
-          type: actions.ADD_TAB,
-          payload: { title: data.title, key: data.itemKey },
-        })
-      }
+      // Add tab action
+      store.dispatch({
+        type: actions.ADD_TAB,
+        payload: { title: data.title, key: data.itemKey },
+      })
     }
     // Set active tab key action
     store.dispatch({

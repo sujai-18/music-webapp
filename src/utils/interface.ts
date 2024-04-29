@@ -1,6 +1,3 @@
-export interface YourPlaylist {
-    [key: string]: any[];
-}
 export interface searchOption {
     value: string;
 }
@@ -20,7 +17,6 @@ export interface commonReducerStateType {
     selectedMusicList: any;
     playlistData: any;
     queueList: any;
-    yourPlaylist: YourPlaylist;
     searchList: any,
     searchOptions: searchOption[],
     songClicked: string,

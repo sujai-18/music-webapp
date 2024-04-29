@@ -14,7 +14,6 @@ const initialState = {
     artistList: [],
     categoryList: [],
     addTab: [],
-    yourPlaylist: {},
     queueList: [],
     playlistModal: false,
     playlistData: [
@@ -113,13 +112,6 @@ export default function commonReducer(state: commonReducerStateType = initialSta
             localStorage.setItem('favourites', JSON.stringify(updateFavList));
             return {
                 ...state,
-                yourPlaylist: {
-                    ...state.yourPlaylist,
-                    [state.playlistData[0].id]: [
-                        ...(state.yourPlaylist?.[state?.playlistData?.[0]?.id] || []),
-                        { ...action.payload.favouriteList, status: true },
-                    ],
-                },
                 favouriteList: updateFavList,
                 messageContent: updateFavList.length > state.favouriteList.length ? 'Music added to Favourite List !' : 'Music removed from Favourite List !',
             };
