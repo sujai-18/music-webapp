@@ -47,7 +47,9 @@ const DraggableTabNode = ({ className, ...props }: DraggableTabPaneProps) => {
 };
 
 const MusicTabs: React.FC = () => {
-  const {addTab, activeTabKey, loader} = useAppSelector((state) => state.commonReducer);
+  const { addTab, activeTabKey, loader } = useAppSelector(
+    (state) => state.commonReducer
+  );
   const [items, setItems] = useState([
     {
       key: "1",
@@ -58,24 +60,24 @@ const MusicTabs: React.FC = () => {
   ]);
   const getChildren = () => {
     const key = addTab[addTab.length - 1].key;
-    if(key === 'categories') {
-      return <Album activeTab={'categories'} />
-    } else if (key === 'artist') {
-      return <Album activeTab={'categories'} />
+    if (key === "categories") {
+      return <Album activeTab={"categories"} />;
+    } else if (key === "artist") {
+      return <Album activeTab={"categories"} />;
     }
-    return <MusicList activeTab={addTab[addTab.length - 1].key} />
-  }
+    return <MusicList activeTab={addTab[addTab.length - 1].key} />;
+  };
   const getAvatar = () => {
     const key = addTab[addTab.length - 1].key;
-    if (key === 'favourites') {
+    if (key === "favourites") {
       return <HeartOutlined />;
-    } else if (key === 'queue') {
+    } else if (key === "queue") {
       return <UnorderedListOutlined />;
-    } else if (key === 'search') {
+    } else if (key === "search") {
       return <SearchOutlined />;
     }
     return <Avatar src={addTab[addTab.length - 1]?.avatar} />;
-  }
+  };
   useEffect(() => {
     if (addTab.length) {
       setActiveKey(addTab[addTab.length - 1].key);
@@ -108,8 +110,22 @@ const MusicTabs: React.FC = () => {
     store.dispatch({
       type: actions.ACTIVE_TAB_KEY,
       payload: key,
-    })
-  }
+    });
+  };
+
+  const changeTab = (key: string) => {
+    store.dispatch({
+      type: actions.LOADER,
+      payload: true,
+    });
+    setTimeout(() => {
+      setActiveKey(key);
+      store.dispatch({
+        type: actions.LOADER,
+        payload: false,
+      });
+    }, 100);
+  };
 
   if (loader) return <Spin fullscreen />;
 
@@ -118,7 +134,7 @@ const MusicTabs: React.FC = () => {
       <Tabs
         items={items}
         activeKey={activeTabKey}
-        onChange={(key) => setActiveKey(key)}
+        onChange={(key) => changeTab(key)}
         renderTabBar={(tabBarProps, DefaultTabBar) => (
           <DndContext sensors={[sensor]} onDragEnd={onDragEnd}>
             <SortableContext
