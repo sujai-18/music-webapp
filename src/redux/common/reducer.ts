@@ -1,43 +1,9 @@
 import uniqid from 'uniqid';
 import actions from './actions';
+import { commonReducerStateType, Entry, Album } from '../../utils/interface';
 // Getting the 'favourites' item from localStorage or initializing it as an empty array if it doesn't exist
 let favouriteList: string[] = JSON.parse(localStorage.getItem('favourites') || '[]');
 
-interface YourPlaylist {
-    [key: string]: any[];
-}
-interface searchOption {
-    value: string;
-}
-interface songsList {
-    [x: string]: any;
-    audioUrl: string;
-    id: string;
-    status: boolean;
-}
-interface currentSongsList {
-    [x: string]: any;
-    audioUrl: string;
-    title: string;
-}
-interface YourStateType {
-    addTab: any;
-    selectedMusicList: any;
-    playlistData: any;
-    queueList: any;
-    yourPlaylist: YourPlaylist;
-    searchList: any,
-    searchOptions: searchOption[],
-    songClicked: string,
-    songsList: currentSongsList[],
-    queueListUrl: songsList[],
-    currentIndex: any,
-    favouriteList: any,
-    activeTabKey: any,
-    loader: boolean,
-    clearTabs: boolean,
-    messageContent: string;
-}
 // Define the default URL for songs
 const defaultUrl =
     "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/10/01/d1/1001d1ed-9ba0-0728-d1f1-88a2af450e14/mzaf_10159851443471051651.plus.aac.p.m4a";
@@ -72,26 +38,9 @@ const initialState = {
     clearTabs: false,
     messageContent: '',
 };
-interface Album {
-    title: string;
-    artist: string;
-    category: string;
-    images: string[];
-    key: string;
-}
 
-interface Artist {
-    name: string;
-}
 
-interface Category {
-    name: string;
-}
-interface Entry {
-    [key: string]: any;
-}
-
-export default function commonReducer(state: YourStateType = initialState, action: { type: any; payload: any; }): any {
+export default function commonReducer(state: commonReducerStateType = initialState, action: { type: any; payload: any; }): any {
     switch (action.type) {
         case actions.GET_ALBUMS_LIST_SUCCESS:
             const entries = action.payload;

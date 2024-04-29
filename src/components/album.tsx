@@ -5,13 +5,6 @@ import { MusicCardContainer } from "../styles/styledCss";
 import CommonModal from "./shared/modal";
 import { Spin } from "antd";
 
-interface Album {
-  title: string;
-  artist: string;
-  category: string;
-  images: string[];
-}
-
 const Album: React.FC<any> = ({ activeTab }) => {
   const selectedMusicList = useAppSelector(
     (state) => state.commonReducer.selectedMusicList

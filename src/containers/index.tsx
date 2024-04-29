@@ -46,7 +46,7 @@ const sideBarItems = [
   },
 ];
 // Generating menu items
-const items2: MenuProps["items"] = [
+const items: MenuProps["items"] = [
   HomeOutlined,
   HeartOutlined,
   UnorderedListOutlined,
@@ -91,7 +91,7 @@ const Index: React.FC = () => {
             defaultSelectedKeys={["1"]}
             defaultOpenKeys={["sub1"]}
             style={{ height: "100%", borderRight: 0 }}
-            items={items2}
+            items={items}
           />
         </Sider>
       </SiderContainer>

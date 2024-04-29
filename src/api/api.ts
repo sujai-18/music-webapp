@@ -65,7 +65,6 @@ export const fetchByTerm = async (params: { title: string; itemKey: string; avat
 // Function to search music by term from iTunes API
 export const searchMusicApi = async (params: { value: string; }) => {
     try {
-        loader(true);
         const response = await axios.get(`https://itunes.apple.com/search?term=${params.value}`);
         // Dispatch action to store search results in Redux store
         store.dispatch({
@@ -73,7 +72,6 @@ export const searchMusicApi = async (params: { value: string; }) => {
             payload: response.data.results,
         })
     } catch (error) {
-        loader(false);
         console.error('Error fetching albums:', error);
         // throw new Error('Failed to fetch albums');
     }

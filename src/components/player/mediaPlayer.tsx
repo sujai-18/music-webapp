@@ -13,10 +13,8 @@ import actions from "../../redux/common/actions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShuffle, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
-interface Song {
-  audioUrl: string;
-  title: string;
-}
+import { Song } from "../../utils/interface";
+
 const { Text } = Typography;
 const MusicPlayer: React.FC<{ playlist: Song[] }> = ({ playlist }) => {
   const dispatch = useDispatch();

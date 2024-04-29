@@ -2,15 +2,8 @@ import React, { useState } from "react";
 import { Card, message } from "antd";
 import { fetchByTerm } from "../../api/api";
 import { useAppSelector } from "../../hooks/reduxhooks";
+import { MusicCardProps } from "../../utils/interface";
 
-interface MusicCardProps {
-  src: string;
-  title: string;
-  artist: string;
-  category: string;
-  itemKey: string;
-  avatar: string;
-}
 const { Meta } = Card;
 const MusicCard: React.FC<MusicCardProps> = ({
   src,

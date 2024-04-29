@@ -14,17 +14,7 @@ import {
   faHeartCircleMinus,
 } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
-interface MusicListProps {
-  activeTab: string;
-}
-interface DataType {
-  key: string;
-  name: string;
-  artist: number;
-  album: string;
-  time: string[];
-  data: any;
-}
+import { MusicListProps, DataType } from "../utils/interface";
 
 const formatDuration: any = (durationInMillis: number) => {
   const totalSeconds = Math.floor(durationInMillis / 1000);
