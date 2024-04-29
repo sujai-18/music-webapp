@@ -1,23 +1,19 @@
 import React, { useEffect } from "react";
 import {
   HomeOutlined,
-  NotificationOutlined,
-  UserOutlined,
   SearchOutlined,
   UnorderedListOutlined,
   HeartOutlined,
   DeleteOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Breadcrumb, Layout, Menu, theme } from "antd";
+import { Layout, Menu, theme } from "antd";
 import { fetchAlbums } from "../api/api";
-import Album from "../components/album";
 import "../styles/global.scss";
 import { setType } from "../utils/helper";
 import MusicTabs from "../components/tabs";
 import {
   ContentContainer,
-  HeaderContainer,
   MusicTrackerContainer,
   SiderContainer,
 } from "../styles/styledCss";
@@ -25,23 +21,12 @@ import MusicPlayerApp from "../components/player/mediaPlayer";
 import { ReactComponent as MusicIcon } from "../assets/svgs/music.svg";
 
 const { Content, Sider } = Layout;
+// Array of sidebar items
 const sideBarItems = [
   {
     label: "Albums",
     key: "1",
   },
-  // {
-  //   label: "Artist",
-  //   key: 'artist',
-  // },
-  // {
-  //   label: "Categories",
-  //   key: "categories",
-  // },
-  // {
-  //   label: "Your Playlist",
-  //   key: "playlist",
-  // },
   {
     label: "Favourites",
     key: "favourites",
@@ -56,14 +41,10 @@ const sideBarItems = [
   },
   {
     label: "Clear Tabs",
-    key: 'clear_tabs',
+    key: "clear_tabs",
   },
 ];
-const items1: MenuProps["items"] = ["1", "2", "3"].map((key) => ({
-  key,
-  label: `nav ${key}`,
-}));
-
+// Generating menu items
 const items2: MenuProps["items"] = [
   HomeOutlined,
   HeartOutlined,
@@ -86,9 +67,11 @@ const items2: MenuProps["items"] = [
 });
 
 const Index: React.FC = () => {
+  // Fetching theme tokens from Ant Design
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+  // Fetch albums on component mount
   useEffect(() => {
     fetchAlbums();
   }, []);

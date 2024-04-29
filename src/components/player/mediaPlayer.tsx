@@ -9,16 +9,17 @@ import {
 } from "@ant-design/icons";
 import { Space, Typography } from "antd";
 import { useAppSelector } from "../../hooks/reduxhooks";
-import store from "../../redux/store";
 import actions from "../../redux/common/actions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShuffle, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch } from "react-redux";
 interface Song {
   audioUrl: string;
   title: string;
 }
 const { Text } = Typography;
 const MusicPlayer: React.FC<{ playlist: Song[] }> = ({ playlist }) => {
+  const dispatch = useDispatch();
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [audio] = useState(new Audio());
   const [isPlaying, setIsPlaying] = useState(false);
@@ -65,7 +66,7 @@ const MusicPlayer: React.FC<{ playlist: Song[] }> = ({ playlist }) => {
       const nextQueueItem = queueListUrl.find(
         (data: { status: any }) => !data.status
       );
-      store.dispatch({
+      dispatch({
         type: actions.UPDATE_QUEUE,
         payload: undefined,
       });

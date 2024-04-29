@@ -19,12 +19,14 @@ const Album: React.FC<any> = ({ activeTab }) => {
   const { albumList, loader, categoryList } = useAppSelector(
     (state) => state.commonReducer
   );
+  // Function to get the list based on the active tab
   const getList = () => {
     if (activeTab === "categories") {
       return categoryList;
     }
     return albumList;
   };
+  // Initial Load
   if (loader) return <Spin fullscreen />;
   return (
     <>
@@ -34,7 +36,7 @@ const Album: React.FC<any> = ({ activeTab }) => {
             title={title}
             artist={artist}
             category={category}
-            src={images[2]}
+            src={images?.[2]} // Using the third image for highest clarity available in the images array
             itemKey={key}
             avatar={images[2]}
           />

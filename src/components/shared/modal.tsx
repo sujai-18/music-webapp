@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { Button, Card, Input, Modal } from "antd";
 import { useAppSelector } from "../../hooks/reduxhooks";
-import store from "../../redux/store";
 import actions from "../../redux/common/actions";
 import { createPlaylist } from "../../utils/helper";
+import { useDispatch } from "react-redux";
 
 const { Meta } = Card;
 
 const CommonModal: React.FC = () => {
+  const dispatch = useDispatch();
   const [value, setValue] = useState<string>("");
   const { playlistModal, yourPlaylist, playlistData } = useAppSelector(
     (state) => state.commonReducer
@@ -15,7 +16,7 @@ const CommonModal: React.FC = () => {
 
   const handleCancel = () => {
     // Dispatching an action to close the playlist modal
-    store.dispatch({
+    dispatch({
       type: actions.PLAYLIST_MODAL,
       payload: false,
     });
@@ -23,11 +24,11 @@ const CommonModal: React.FC = () => {
 
   const onClick = (key: string, data: string) => {
     // Dispatching an action to close the playlist modal
-    store.dispatch({
+    dispatch({
       type: actions.PLAYLIST_MODAL,
       payload: false,
     });
-    store.dispatch({
+    dispatch({
       type: actions.ADD_TAB,
       payload: { title: data, key },
     });

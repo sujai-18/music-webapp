@@ -14,30 +14,30 @@ import { useAppSelector } from "../hooks/reduxhooks";
 import MusicList from "./musicList";
 import { TabsContainer } from "../styles/styledCss";
 import actions from "../redux/common/actions";
-import store from "../redux/store";
 import {
   HomeOutlined,
   SearchOutlined,
   UnorderedListOutlined,
   HeartOutlined,
 } from "@ant-design/icons";
+import { useDispatch } from "react-redux";
 interface DraggableTabPaneProps extends React.HTMLAttributes<HTMLDivElement> {
   "data-node-key": string;
 }
-
+// Draggable tab node component
 const DraggableTabNode = ({ className, ...props }: DraggableTabPaneProps) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
       id: props["data-node-key"],
     });
-
+  // Styling for draggable tab
   const style: React.CSSProperties = {
     ...props.style,
     transform: CSS.Transform.toString(transform && { ...transform, scaleX: 1 }),
     transition,
     cursor: "move",
   };
-
+  // Rendering the draggable tab node
   return React.cloneElement(props.children as React.ReactElement, {
     ref: setNodeRef,
     style,
@@ -47,9 +47,11 @@ const DraggableTabNode = ({ className, ...props }: DraggableTabPaneProps) => {
 };
 
 const MusicTabs: React.FC = () => {
+  const dispatch = useDispatch();
   const { addTab, activeTabKey, loader, clearTabs } = useAppSelector(
     (state) => state.commonReducer
   );
+  // State for tab items
   const [items, setItems] = useState([
     {
       key: "1",
@@ -58,6 +60,7 @@ const MusicTabs: React.FC = () => {
       icon: <HomeOutlined />,
     },
   ]);
+  // Function to get children based on the active tab
   const getChildren = () => {
     const key = addTab[addTab.length - 1].key;
     if (key === "categories") {
@@ -67,6 +70,7 @@ const MusicTabs: React.FC = () => {
     }
     return <MusicList activeTab={addTab[addTab.length - 1].key} />;
   };
+  // Function to get avatar based on the active tab
   const getAvatar = () => {
     const key = addTab[addTab.length - 1].key;
     if (key === "favourites") {
@@ -78,6 +82,7 @@ const MusicTabs: React.FC = () => {
     }
     return <Avatar src={addTab[addTab.length - 1]?.avatar} />;
   };
+  // Effect to update tab items when addTab changes
   useEffect(() => {
     if (addTab.length) {
       setActiveKey(addTab[addTab.length - 1].key);
@@ -91,11 +96,11 @@ const MusicTabs: React.FC = () => {
       ]);
     }
   }, [addTab]);
-
+  // Dnd-kit sensor for pointer events
   const sensor = useSensor(PointerSensor, {
     activationConstraint: { distance: 10 },
   });
-
+  // Function to handle drag end event
   const onDragEnd = ({ active, over }: DragEndEvent) => {
     if (active.id !== over?.id) {
       setItems((prev) => {
@@ -105,31 +110,31 @@ const MusicTabs: React.FC = () => {
       });
     }
   };
-
+  // Function to set active tab key
   const setActiveKey = (key: any) => {
-    store.dispatch({
+    dispatch({
       type: actions.ACTIVE_TAB_KEY,
       payload: key,
     });
   };
-
+  // Function to change tab
   const changeTab = (key: string) => {
-    store.dispatch({
+    dispatch({
       type: actions.LOADER,
       payload: true,
     });
     setTimeout(() => {
       setActiveKey(key);
-      store.dispatch({
+      dispatch({
         type: actions.LOADER,
         payload: false,
       });
     }, 100);
   };
-
+  // Effect to handle clearing tabs
   useEffect(() => {
     if (clearTabs) {
-      setActiveKey('1');
+      setActiveKey("1");
       setItems([
         {
           key: "1",
@@ -137,10 +142,11 @@ const MusicTabs: React.FC = () => {
           children: <Album />,
           icon: <HomeOutlined />,
         },
-      ])
+      ]);
     }
-  }, [clearTabs])
+  }, [clearTabs]);
 
+  // Render loading spinner if loader is true
   if (loader) return <Spin fullscreen />;
 
   return (

@@ -21,10 +21,12 @@ const MusicCard: React.FC<MusicCardProps> = ({
   avatar,
 }) => {
   const { addTab } = useAppSelector((state) => state.commonReducer);
+  // Check if the clicked tab key already exists in the addTab state
   const clickedTabKeyExists = addTab.some(
     (tab: { key: string }) => tab.key === itemKey
   );
   const [messageApi, contextHolder] = message.useMessage();
+  // Function to display a warning message
   const warning = () => {
     messageApi.open({
       type: "warning",
@@ -47,6 +49,7 @@ const MusicCard: React.FC<MusicCardProps> = ({
         <div>Artist: {artist}</div>
         <div>Category: {category}</div>
       </Card>
+      {/* Context holder for displaying messages */}
       {contextHolder}
     </>
   );

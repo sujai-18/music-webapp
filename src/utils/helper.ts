@@ -9,6 +9,15 @@ interface GridSettingsParams {
   listSize?: number;
   rowHeight?: number;
 }
+/**
+ * Calculates and returns grid settings based on provided parameters.
+ * @param screenWidth Width of the screen
+ * @param itemWidth Width of each grid item
+ * @param containerHeight Height of the grid container
+ * @param listSize Number of items in the list
+ * @param rowHeight Height of each row in the grid
+ * @returns Object containing calculated grid settings
+ */
 
 export function calculateGridSettings({
   screenWidth,
@@ -36,12 +45,18 @@ export function calculateGridSettings({
   };
 }
 
+/**
+ * Sets the type of action based on the provided data.
+ * @param data Object containing item key and title
+ */
 export function setType(data: any) {
   if (data.itemKey === 'clear_tabs') {
+    // Clear tabs action
     store.dispatch({
       type: actions.CLEAR_TABS,
       payload: true,
     })
+    // Delayed clearing of tabs state
     setTimeout(() => {
       store.dispatch({
         type: actions.CLEAR_TABS,
@@ -56,18 +71,25 @@ export function setType(data: any) {
           payload: true,
         })
       } else {
+        // Add tab action
         store.dispatch({
           type: actions.ADD_TAB,
           payload: { title: data.title, key: data.itemKey },
         })
       }
     }
+    // Set active tab key action
     store.dispatch({
       type: actions.ACTIVE_TAB_KEY,
       payload: data.itemKey,
     })
   }
 }
+
+/**
+ * Dispatches an action to add a song to the favorites list.
+ * @param data Object containing song data
+ */
 
 export function addToFavourites(data: object) {
   store.dispatch({
@@ -77,27 +99,41 @@ export function addToFavourites(data: object) {
     },
   })
 }
-
+/**
+ * Dispatches an action to add a song to the queue.
+ * @param data Object containing song data
+ */
 export function addToQueue(data: object) {
   store.dispatch({
     type: actions.ADD_TO_QUEUE,
     payload: data,
   })
 }
-
+/**
+ * Dispatches an action to create a new playlist.
+ * @param data Title of the new playlist
+ */
 export function createPlaylist(data: string) {
   store.dispatch({
     type: actions.CREATE_PLAYLIST,
     payload: { title: data, id: uniqid('playlist') },
   })
 }
-
+/**
+ * Checks if a tab with the provided item key already exists.
+ * @param itemKey Key of the tab to check
+ * @returns Boolean indicating if the tab exists
+ */
 export function checkForExistence(itemKey: any) {
   const { addTab } = store.getState().commonReducer;
   const doesExists = addTab.some((tab: { key: any; }) => tab.key === itemKey);
   return doesExists;
 }
 
+/**
+ * Dispatches an action to play the selected song.
+ * @param data Object containing song data
+ */
 export function playSong(data: any) {
   store.dispatch({
     type: actions.PLAY_SONG,

@@ -5,8 +5,6 @@ import type { Input, TableProps } from "antd";
 import { MusicListContainer } from "../styles/styledCss";
 import { addToFavourites, addToQueue, playSong } from "../utils/helper";
 import Search from "./shared/search";
-import { HeartTwoTone } from "@ant-design/icons";
-import store from "../redux/store";
 import actions from "../redux/common/actions";
 import { ReactComponent as QueueIcon } from "../assets/svgs/queue.svg";
 import { PlayCircleOutlined } from "@ant-design/icons";
@@ -15,6 +13,7 @@ import {
   faHeartCirclePlus,
   faHeartCircleMinus,
 } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch } from "react-redux";
 interface MusicListProps {
   activeTab: string;
 }
@@ -35,6 +34,7 @@ const formatDuration: any = (durationInMillis: number) => {
 };
 
 const MusicList: React.FC<MusicListProps> = ({ activeTab }) => {
+  const dispatch = useDispatch();
   const selectedMusicList = useAppSelector(
     (state) => state.commonReducer.selectedMusicList
   );
@@ -46,14 +46,16 @@ const MusicList: React.FC<MusicListProps> = ({ activeTab }) => {
   );
   const activeTabList = selectedMusicList[activeTab];
   const screenHeight = document.getElementById("app")?.clientHeight || 700;
+  // Updating the song list based on the active tab
   useEffect(() => {
     if (activeTabList?.length || searchList?.length || favouriteList?.length) {
-      store.dispatch({
+      dispatch({
         type: actions.UPDATE_SONG_LIST,
         payload: [...(activeTabList || []), ...searchList, ...favouriteList],
       });
     }
   }, [activeTabList, searchList, favouriteList]);
+  // Columns configuration for the table
   const columns: TableProps<DataType>["columns"] = [
     {
       title: "Name",
@@ -143,6 +145,7 @@ const MusicList: React.FC<MusicListProps> = ({ activeTab }) => {
       render: (text) => <a>{text}</a>,
     },
   ];
+  // Mapping data to the table format
   const list =
     activeTab === "favourites"
       ? favouriteList
@@ -169,33 +172,12 @@ const MusicList: React.FC<MusicListProps> = ({ activeTab }) => {
       data,
     })
   );
-  const [windowSize, setWindowSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    // Cleanup function to remove the event listener when component unmounts
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  // Rendering the component
   return (
     <>
-      {activeTab === "search" ? (
-        <>
-          <Search />
-        </>
-      ) : null}
+      {/* Rendering the search component */}
+      {activeTab === "search" ? <Search /> : null}
+      {/* Rendering the table */}
       <MusicListContainer>
         <Table
           columns={columns}
