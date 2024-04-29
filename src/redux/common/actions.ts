@@ -13,6 +13,7 @@ const actions = {
     UPDATE_QUEUE: 'UPDATE_QUEUE',
     ACTIVE_TAB_KEY: 'ACTIVE_TAB_KEY',
     LOADER: 'LOADER',
+    CLEAR_TABS: 'CLEAR_TABS',
 }
 
 export default actions;

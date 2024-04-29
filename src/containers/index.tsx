@@ -6,6 +6,7 @@ import {
   SearchOutlined,
   UnorderedListOutlined,
   HeartOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
@@ -53,6 +54,10 @@ const sideBarItems = [
     label: "Search",
     key: "search",
   },
+  {
+    label: "Clear Tabs",
+    key: 'clear_tabs',
+  },
 ];
 const items1: MenuProps["items"] = ["1", "2", "3"].map((key) => ({
   key,
@@ -61,12 +66,10 @@ const items1: MenuProps["items"] = ["1", "2", "3"].map((key) => ({
 
 const items2: MenuProps["items"] = [
   HomeOutlined,
-  // UserOutlined,
-  // NotificationOutlined,
-  // NotificationOutlined,
   HeartOutlined,
   UnorderedListOutlined,
   SearchOutlined,
+  DeleteOutlined,
 ].map((icon, index) => {
   const key = String(index + 1);
 

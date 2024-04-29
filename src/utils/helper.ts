@@ -37,23 +37,36 @@ export function calculateGridSettings({
 }
 
 export function setType(data: any) {
-  if (!checkForExistence(data.itemKey) && data.itemKey !== '1') {
-    if (data.itemKey === 'playlist') {
+  if (data.itemKey === 'clear_tabs') {
+    store.dispatch({
+      type: actions.CLEAR_TABS,
+      payload: true,
+    })
+    setTimeout(() => {
       store.dispatch({
-        type: actions.PLAYLIST_MODAL,
-        payload: true,
+        type: actions.CLEAR_TABS,
+        payload: false,
       })
-    } else {
-      store.dispatch({
-        type: actions.ADD_TAB,
-        payload: { title: data.title, key: data.itemKey },
-      })
+    }, 100)
+  } else {
+    if (!checkForExistence(data.itemKey) && data.itemKey !== '1') {
+      if (data.itemKey === 'playlist') {
+        store.dispatch({
+          type: actions.PLAYLIST_MODAL,
+          payload: true,
+        })
+      } else {
+        store.dispatch({
+          type: actions.ADD_TAB,
+          payload: { title: data.title, key: data.itemKey },
+        })
+      }
     }
+    store.dispatch({
+      type: actions.ACTIVE_TAB_KEY,
+      payload: data.itemKey,
+    })
   }
-  store.dispatch({
-    type: actions.ACTIVE_TAB_KEY,
-    payload: data.itemKey,
-  })
 }
 
 export function addToFavourites(data: object) {

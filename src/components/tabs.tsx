@@ -47,7 +47,7 @@ const DraggableTabNode = ({ className, ...props }: DraggableTabPaneProps) => {
 };
 
 const MusicTabs: React.FC = () => {
-  const { addTab, activeTabKey, loader } = useAppSelector(
+  const { addTab, activeTabKey, loader, clearTabs } = useAppSelector(
     (state) => state.commonReducer
   );
   const [items, setItems] = useState([
@@ -126,6 +126,20 @@ const MusicTabs: React.FC = () => {
       });
     }, 100);
   };
+
+  useEffect(() => {
+    if (clearTabs) {
+      setActiveKey('1');
+      setItems([
+        {
+          key: "1",
+          label: "Home",
+          children: <Album />,
+          icon: <HomeOutlined />,
+        },
+      ])
+    }
+  }, [clearTabs])
 
   if (loader) return <Spin fullscreen />;
 
