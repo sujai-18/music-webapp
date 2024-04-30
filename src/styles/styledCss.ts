@@ -192,6 +192,21 @@ export const TabsContainer = styled.div`
 .ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
     color: #e9ecf1;
 }
+@media (max-width: 768px) {
+  .ant-tabs .ant-tabs-tab {
+    padding: 0;
+  }
+  .ant-tabs-tab-btn {
+    span:last-child {
+        display: none !important;
+    }
+    .ant-tabs-tab-icon {
+        span {
+            display: flex !important;
+        }
+    }
+  }
+}
 `;
 
 export const MusicTrackerContainer = styled.div`
@@ -261,6 +276,9 @@ export const MusicTrackerContainer = styled.div`
        input, .start-time, .end-time {
         display: none;
        }
+      }
+      .ant-typography {
+        display: none;
       }
     }
 `;

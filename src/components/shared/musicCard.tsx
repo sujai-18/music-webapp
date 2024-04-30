@@ -33,7 +33,7 @@ const MusicCard: React.FC<MusicCardProps> = ({
         style={{ width: 240 }}
         cover={<img alt="example" src={src} />}
         onClick={() =>
-          addTab.length > 3 && !clickedTabKeyExists
+          addTab.length > 2 && !clickedTabKeyExists
             ? warning()
             : fetchByTerm({ title, itemKey, avatar })
         }

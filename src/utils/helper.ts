@@ -21,8 +21,8 @@ interface GridSettingsParams {
 
 export function calculateGridSettings({
   screenWidth,
-  itemWidth = 370,
-  containerHeight = 400,
+  itemWidth = 265,
+  containerHeight = 1100,
   listSize = 0,
   rowHeight = 150,
 }: GridSettingsParams) {
@@ -50,7 +50,14 @@ export function calculateGridSettings({
  * @param data Object containing item key and title
  */
 export function setType(data: any) {
-  if (data.itemKey === 'clear_tabs') {
+  const restrictedNewTabs = ['favourites', 'queue', 'search'];
+  const {addTab} = store.getState().commonReducer;
+  if (restrictedNewTabs.includes(data.itemKey) && addTab.length > 2) {
+    store.dispatch({
+      type: actions.MESSAGE_CONTENT,
+      payload: `Please clear tabs to see ${data.itemKey}!`,
+    })
+  } else if (data.itemKey === 'clear_tabs') {
     // Clear tabs action
     store.dispatch({
       type: actions.CLEAR_TABS,
