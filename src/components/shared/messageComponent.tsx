@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from "react";
+import React, { memo, useEffect, useMemo } from "react";
 import { message } from "antd";
 import { useAppSelector } from "../../hooks/reduxhooks";
 
@@ -6,11 +6,16 @@ const MessageComponent: React.FC<any> = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const { messageContent, favouriteList, queueListUrl, clearTabs } =
     useAppSelector((state) => state.commonReducer);
+  // Memoizing the message content
+  const memoizedMessageContent = useMemo(
+    () => messageContent,
+    [messageContent]
+  );
 
   const success = () => {
     messageApi.open({
       type: "success",
-      content: messageContent,
+      content: memoizedMessageContent,
     });
   };
 

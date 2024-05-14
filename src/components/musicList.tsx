@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { Suspense, lazy, useEffect } from "react";
 import { useAppSelector } from "../hooks/reduxhooks";
-import { Avatar, Space, Table } from "antd";
+import { Avatar, Space, Spin, Table } from "antd";
 import type { Input, TableProps } from "antd";
 import { MusicListContainer } from "../styles/styledCss";
 import { addToFavourites, addToQueue, playSong } from "../utils/helper";
-import Search from "./shared/search";
 import actions from "../redux/common/actions";
 import { ReactComponent as QueueIcon } from "../assets/svgs/queue.svg";
 import { PlayCircleOutlined } from "@ant-design/icons";
@@ -22,7 +21,7 @@ const formatDuration: any = (durationInMillis: number) => {
   const seconds = totalSeconds % 60;
   return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
 };
-
+const Search = lazy(() => import("./shared/search"));
 const MusicList: React.FC<MusicListProps> = ({ activeTab }) => {
   const dispatch = useDispatch();
   const selectedMusicList = useAppSelector(
@@ -83,16 +82,6 @@ const MusicList: React.FC<MusicListProps> = ({ activeTab }) => {
               ) : (
                 <FontAwesomeIcon icon={faHeartCirclePlus} />
               )}
-              {/* <HeartTwoTone
-                twoToneColor={
-                  favouriteList?.find(
-                    (favData: { trackId: any }) =>
-                      favData.trackId === data.data.trackId
-                  )?.status
-                    ? "#000000"
-                    : "#eb2f96"
-                }
-              /> */}
             </div>
             <div onClick={() => addToQueue(data.data)} className="queue">
               <QueueIcon width={"20"} height={"20"} />
@@ -163,7 +152,11 @@ const MusicList: React.FC<MusicListProps> = ({ activeTab }) => {
   return (
     <>
       {/* Rendering the search component */}
-      {activeTab === "search" ? <Search /> : null}
+      {activeTab === "search" ? (
+        <Suspense fallback={<Spin fullscreen />}>
+          <Search />
+        </Suspense>
+      ) : null}
       {/* Rendering the table */}
       <MusicListContainer>
         <Table

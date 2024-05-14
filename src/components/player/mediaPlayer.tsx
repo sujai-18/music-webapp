@@ -26,19 +26,41 @@ const MusicPlayer: React.FC<{ playlist: Song[] }> = ({ playlist }) => {
   const [currentSongTitle, setCurrentSongTitle] = useState<string>("");
   const [repeatMode, setRepeatMode] = useState(false);
   const [shuffleMode, setShuffleMode] = useState(false);
-  const progressBarRef = useRef<HTMLInputElement>(null);
+  const [preventAction, setPreventAction] = useState(false);
   const { songClicked, queueListUrl, currentIndex } = useAppSelector(
     (state) => state.commonReducer
   );
+  const waiting = () => {
+    setPreventAction(true);
+  };
+  const canPlay = () => {
+    setPreventAction(false);
+  };
+  // Update the audio src on change of currentSongIndex
   useEffect(() => {
     audio.src = playlist?.[currentSongIndex]?.audioUrl;
     setCurrentSongTitle(playlist[currentSongIndex].title || "");
-    if (isPlaying) audio.play();
-    else audio.pause();
+    audio.removeEventListener("waiting", waiting);
+    audio.removeEventListener("canplay", canPlay);
+    audio.addEventListener("waiting", waiting);
+    audio.addEventListener("canplay", canPlay);
+  }, [currentSongIndex]);
+  // Effect to retrigger eventlistners to get updated state reflected in media player
+  useEffect(() => {
+    if (isPlaying) {
+      audio.removeEventListener("timeupdate", updateCurrentTime);
+      audio.removeEventListener("ended", handleSongEnd);
+      audio.addEventListener("timeupdate", updateCurrentTime);
+      audio.addEventListener("loadedmetadata", updateDuration);
+      audio.addEventListener("ended", handleSongEnd);
 
-    audio.addEventListener("timeupdate", updateCurrentTime);
-    audio.addEventListener("loadedmetadata", updateDuration);
-    audio.addEventListener("ended", handleSongEnd); // Listen for ended event
+      audio.paused && audio.play();
+    } else {
+      audio.played && audio.pause();
+      audio.removeEventListener("timeupdate", updateCurrentTime);
+      audio.removeEventListener("loadedmetadata", updateDuration);
+      audio.removeEventListener("ended", handleSongEnd);
+    }
 
     return () => {
       audio.pause();
@@ -47,16 +69,18 @@ const MusicPlayer: React.FC<{ playlist: Song[] }> = ({ playlist }) => {
       audio.removeEventListener("ended", handleSongEnd); // Remove event listener
     };
   }, [currentSongIndex, isPlaying, queueListUrl.length, repeatMode]);
-
+  const shuffleList = () => {
+    const randomIndex = Math.floor(Math.random() * playlist.length);
+    setCurrentSongIndex(randomIndex);
+  };
   const handleSongEnd = () => {
     if (repeatMode) {
       // If repeat mode is enabled, replay the current song
       audio.currentTime = 0;
-      audio.play();
+      audio.paused && audio.play();
     } else if (shuffleMode) {
       // If shuffle mode is enabled, play a random song from the playlist
-      const randomIndex = Math.floor(Math.random() * playlist.length);
-      setCurrentSongIndex(randomIndex);
+      shuffleList();
     } else if (
       queueListUrl.length > 0 &&
       queueListUrl.some((data: { status: boolean }) => !data.status)
@@ -101,28 +125,25 @@ const MusicPlayer: React.FC<{ playlist: Song[] }> = ({ playlist }) => {
   };
 
   const playNextSong = () => {
-    setCurrentSongIndex((prevIndex) => (prevIndex + 1) % playlist.length);
+    if (shuffleMode) {
+      shuffleList();
+    } else {
+      setCurrentSongIndex((prevIndex) => (prevIndex + 1) % playlist.length);
+    }
   };
 
   const playPreviousSong = () => {
-    setCurrentSongIndex(
-      (prevIndex) => (prevIndex - 1 + playlist.length) % playlist.length
-    );
+    if (shuffleMode) {
+      shuffleList();
+    } else {
+      setCurrentSongIndex(
+        (prevIndex) => (prevIndex - 1 + playlist.length) % playlist.length
+      );
+    }
   };
 
   const handleProgressBarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTime = parseFloat(e.target.value);
-    setCurrentTime(newTime);
-    audio.currentTime = newTime;
-  };
-
-  const handleProgressBarDrag = (e: React.MouseEvent<HTMLInputElement>) => {
-    const progressBar = progressBarRef.current;
-    if (!progressBar) return;
-
-    const rect = progressBar.getBoundingClientRect();
-    const offsetX = e.clientX - rect.left;
-    const newTime = (offsetX / progressBar.offsetWidth) * duration;
     setCurrentTime(newTime);
     audio.currentTime = newTime;
   };
@@ -167,7 +188,9 @@ const MusicPlayer: React.FC<{ playlist: Song[] }> = ({ playlist }) => {
   };
 
   return (
-    <Space className="space-container">
+    <Space
+      className={`space-container ${preventAction ? "restrict-action" : ""}`}
+    >
       <div className="media-player">
         <Space>
           <div onClick={toggleShuffleMode}>

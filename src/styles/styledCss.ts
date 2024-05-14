@@ -267,6 +267,14 @@ export const MusicTrackerContainer = styled.div`
       width: 100%;
       justify-content: space-between;
     }
+    .restrict-action {
+        cursor: not-allowed;
+        opacity: 0.5;
+        .media-player {
+          pointer-events: none;
+        }
+      }
+    }
     .media-player {
       display: flex;
       align-items: center;

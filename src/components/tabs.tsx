@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Suspense, lazy, useEffect, useState } from "react";
 import type { DragEndEvent } from "@dnd-kit/core";
 import { DndContext, PointerSensor, useSensor } from "@dnd-kit/core";
 import {
@@ -11,7 +11,6 @@ import { CSS } from "@dnd-kit/utilities";
 import { Avatar, Spin, Tabs } from "antd";
 import Album from "./album";
 import { useAppSelector } from "../hooks/reduxhooks";
-import MusicList from "./musicList";
 import { TabsContainer } from "../styles/styledCss";
 import actions from "../redux/common/actions";
 import {
@@ -24,6 +23,7 @@ import { useDispatch } from "react-redux";
 interface DraggableTabPaneProps extends React.HTMLAttributes<HTMLDivElement> {
   "data-node-key": string;
 }
+const MusicList = lazy(() => import("./musicList"));
 // Draggable tab node component
 const DraggableTabNode = ({ className, ...props }: DraggableTabPaneProps) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -65,10 +65,12 @@ const MusicTabs: React.FC = () => {
     const key = addTab[addTab.length - 1].key;
     if (key === "categories") {
       return <Album activeTab={"categories"} />;
-    } else if (key === "artist") {
-      return <Album activeTab={"categories"} />;
     }
-    return <MusicList activeTab={addTab[addTab.length - 1].key} />;
+    return (
+      <Suspense fallback={<Spin fullscreen />}>
+        <MusicList activeTab={addTab[addTab.length - 1].key} />
+      </Suspense>
+    );
   };
   // Function to get avatar based on the active tab
   const getAvatar = () => {
